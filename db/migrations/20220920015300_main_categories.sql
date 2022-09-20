@@ -1,10 +1,9 @@
 -- migrate:up
-CREATE TABLE options(
+CREATE TABLE main_categories(
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
-    price DECIMAL(8,1) NOT NULL,
     PRIMARY KEY (id)
 );
 
 -- migrate:down
-DROP TABLE options;
+DROP TABLE main_categories;
