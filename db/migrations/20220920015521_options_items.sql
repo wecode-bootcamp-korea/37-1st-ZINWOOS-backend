@@ -1,5 +1,5 @@
 -- migrate:up
-CREATE TABLE option_selector(
+CREATE TABLE options_items(
     id INT NOT NULL AUTO_INCREMENT,
     item_id INT NOT NULL,
     option_id INT NOT NULL,
@@ -9,4 +9,4 @@ CREATE TABLE option_selector(
 );
 
 -- migrate:down
-DROP TABLE option_selector;
+DROP TABLE options_items;

@@ -4,6 +4,8 @@ CREATE TABLE items(
     name VARCHAR(50) NOT NULL UNIQUE,
     description VARCHAR(1000) NULL,
     price DECIMAL(8,1) NOT NULL,
+    detail VARCHAR(3000) NULL,
+    detail_image VARCHAR(1000) NULL,
     sub_category_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,

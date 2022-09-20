@@ -1,5 +1,5 @@
 -- migrate:up
-CREATE TABLE tag_selector(
+CREATE TABLE tags_items(
     id INT NOT NULL AUTO_INCREMENT,
     tag_id INT NOT NULL,
     item_id INT NOT NULL,
@@ -9,4 +9,4 @@ CREATE TABLE tag_selector(
 );
 
 -- migrate:down
-DROP TABLE tag_selector;
+DROP TABLE tags_items;
