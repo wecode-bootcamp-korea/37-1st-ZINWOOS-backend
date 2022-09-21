@@ -4,10 +4,12 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const morgan = require('morgan');
+const routes = require('./api/routes')
 
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
+app.use(routes)
 
 const port = process.env.PORT;
 
