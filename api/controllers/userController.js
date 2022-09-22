@@ -1,6 +1,7 @@
 const { userService } = require('../services')
+const { asyncWrap } = require('../utils/error')
 
-const signUp = async (req, res) => {
+const signUp = asyncWrap(async (req, res) => {
     const { name, email, password, address, phoneNumber } = req.body;
 
     if ( !name || !email || !password || !address || !phoneNumber ) {
@@ -9,10 +10,10 @@ const signUp = async (req, res) => {
         throw error;
     }
 
-    const signUp = await userService.signUp(name, email, password, address, phoneNumber);
+    await userService.signUp(name, email, password, address, phoneNumber);
 
     res.status(201).json({ message:'User created successfully!' })
-}
+})
 
 module.exports = {
     signUp

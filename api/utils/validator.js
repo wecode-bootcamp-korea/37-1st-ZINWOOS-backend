@@ -22,22 +22,7 @@ const validateEmail = (email) => {
     };
 }
 
-/*
-const validatePhonenumber = (phonNumber) => {
-    const re = new RegExp(
-        /^01([0|1|6|7|8|9]?)-?([0-9]{3,4})-?([0-9]{4})$/
-    )
-
-    if (!re.test(phonNumber)) {
-        const error = new Error('Invalid phone number');
-        error.statusCode = 400;
-        throw error;
-    }
-}
-*/
-
 module.exports = {
     validatePassword,
-    // validatePhonenumber,
     validateEmail
 }

@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+
 const { userDao } = require('../models');
 const validator = require('../utils/validator')
 
@@ -12,11 +13,10 @@ const hashPassword = async (password) => {
 const signUp = async (name, email, password, address, phoneNumber) => {
     validator.validateEmail(email);
     validator.validatePassword(password);
-    // validator.validatePhonenumber(phoneNumber);
 
-    const checkOverlap = await userDao.selectUserByEmail(email)
+    const checkOverlap = await userDao.getUserByEmail(email)
 
-    if (!checkOverlap) {
+    if (checkOverlap) {
         const error = new Error('User already exists')
         error.statusCode = 400;
         throw error;
