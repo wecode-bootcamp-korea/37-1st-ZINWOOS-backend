@@ -13,7 +13,7 @@ dataSource.initialize()
     .then(() => {
         console.log(`DataSource has been initialized!`)
     })
-    .catch((err) => {
+    .catch((error) => {
         console.error("Error during Data Source initialization", error);
     });
 
