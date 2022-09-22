@@ -24,8 +24,8 @@ const signUp = async (name, email, password, address, phoneNumber) => {
     const checkOverlap = await userDao.getUserByEmail(email)
 
     if (checkOverlap) {
-        const error = new Error('User already exists')
-        error.statusCode = 400;
+        const error = new Error('INVALID_USER')
+        error.statusCode = 401;
         throw error;
     }
 
@@ -35,22 +35,20 @@ const signUp = async (name, email, password, address, phoneNumber) => {
 }
 
 const signIn = async (email, password) => {
-    validator.validateEmail(email);
-    validator.validatePassword(password);
 
     const user = await userDao.getUserByEmail(email);
 
     if (!user) {
-        const error = new Error('User not found');
-        error.statusCode = 404;
+        const error = new Error('INVALID_USER');
+        error.statusCode = 401;
         throw error;
     }
 
     const match = await bcrypt.compare(password, user.password);
 
     if (!match) {
-        const error = new Error('Password invalid');
-        error.statusCode = 400;
+        const error = new Error('INVALID_USER');
+        error.statusCode = 401;
         throw error;
     }
 
