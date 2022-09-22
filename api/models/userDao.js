@@ -1,14 +1,24 @@
 const dataSource = require('./data-source');
 
 const getUserByEmail = async (email) => {
-    const result =  await dataSource.query(
+    const [ result ] =  await dataSource.query(
         `SELECT * FROM users
-         WHERE email = ?
+        WHERE email = ?
         `, [ email ]
     );
 
     return result;
-}
+};
+
+const getUserById = async(id) => {
+    const [ result ] = await dataSource.query(
+        `SELECT * FROM users
+        WHERE id = ?
+        `, [ id ]
+    );
+
+    return result;
+};
 
 const createUser = async (name, email, hashedPassword, address, phoneNumber) => {
     const result = await dataSource.query(
@@ -23,9 +33,10 @@ const createUser = async (name, email, hashedPassword, address, phoneNumber) => 
     );
 
     return result;
-}
+};
 
 module.exports = {
     getUserByEmail,
+    getUserById,
     createUser
 }
