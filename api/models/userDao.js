@@ -2,7 +2,15 @@ const dataSource = require('./data-source');
 
 const getUserByEmail = async (email) => {
     const [ result ] =  await dataSource.query(
-        `SELECT * FROM users
+        `SELECT(
+            id,
+            name,
+            email,
+            password,
+            address,
+            phone_number
+        ) 
+        FROM users
         WHERE email = ?
         `, [ email ]
     );
@@ -12,7 +20,15 @@ const getUserByEmail = async (email) => {
 
 const getUserById = async(id) => {
     const [ result ] = await dataSource.query(
-        `SELECT * FROM users
+        `SELECT(
+            id,
+            name,
+            email,
+            password,
+            address,
+            phone_number
+        )
+        FROM users
         WHERE id = ?
         `, [ id ]
     );

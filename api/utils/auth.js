@@ -20,8 +20,7 @@ const loginRequired = asyncWrap(async (req, res, next) => {
         error.statucCode = 404;
         throw error;
     }
-
-    req.user = user;
+    
     next();
 })
 
