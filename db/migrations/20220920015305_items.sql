@@ -7,6 +7,7 @@ CREATE TABLE items(
     detail VARCHAR(3000) NULL,
     detail_image VARCHAR(1000) NULL,
     sub_category_id INT NOT NULL,
+    checkbox BOOLEAN NOT NULL DEFAULT 1,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),

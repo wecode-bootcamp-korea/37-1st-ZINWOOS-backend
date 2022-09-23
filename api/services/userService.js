@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 const { userDao } = require('../models');
 const validator = require('../utils/validator')
@@ -10,6 +11,12 @@ const hashPassword = async (password) => {
     return await bcrypt.hash(password, salt)
 }
 
+const getUserById = async (id) => {
+    const result = await userDao.getUserById(id)
+
+    return result;
+}
+
 const signUp = async (name, email, password, address, phoneNumber) => {
     validator.validateEmail(email);
     validator.validatePassword(password);
@@ -17,8 +24,8 @@ const signUp = async (name, email, password, address, phoneNumber) => {
     const checkOverlap = await userDao.getUserByEmail(email)
 
     if (checkOverlap) {
-        const error = new Error('User already exists')
-        error.statusCode = 400;
+        const error = new Error('INVALID_USER')
+        error.statusCode = 401;
         throw error;
     }
 
@@ -27,6 +34,37 @@ const signUp = async (name, email, password, address, phoneNumber) => {
     return await userDao.createUser(name, email, hashedPassword, address, phoneNumber)
 }
 
+const signIn = async (email, password) => {
+
+    const user = await userDao.getUserByEmail(email);
+
+    if (!user) {
+        const error = new Error('INVALID_USER');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    const match = await bcrypt.compare(password, user.password);
+
+    if (!match) {
+        const error = new Error('INVALID_USER');
+        error.statusCode = 401;
+        throw error;
+    }
+
+    const accessToken = jwt.sign({ id:user.id }, process.env.JWT_SECRET, 
+        {
+            algorithm: process.env.ALGORITHM,
+            expiresIn: process.env.JWT_EXPIRES_IN
+        }
+    );
+
+    return accessToken;
+}
+
+
 module.exports = {
-    signUp
+    signUp,
+    signIn,
+    getUserById
 }
