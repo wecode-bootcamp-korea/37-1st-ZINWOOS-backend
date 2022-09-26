@@ -1,4 +1,4 @@
-const dataSource = require('./data-source');
+const { dataSource } = require('./data-source');
 
 const getUserByEmail = async (email) => {
     const [ result ] =  await dataSource.query(

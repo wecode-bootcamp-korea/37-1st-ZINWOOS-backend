@@ -35,6 +35,8 @@ const signUp = async (name, email, password, address, phoneNumber) => {
 }
 
 const signIn = async (email, password) => {
+    validator.validateEmail(email);
+    validator.validatePassword(password);
 
     const user = await userDao.getUserByEmail(email);
 
@@ -52,7 +54,7 @@ const signIn = async (email, password) => {
         throw error;
     }
 
-    const accessToken = jwt.sign({ id:user.id }, process.env.JWT_SECRET, 
+    const accessToken = jwt.sign({ id : user.id }, process.env.JWT_SECRET,
         {
             algorithm: process.env.ALGORITHM,
             expiresIn: process.env.JWT_EXPIRES_IN
