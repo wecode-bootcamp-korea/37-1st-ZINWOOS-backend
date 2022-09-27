@@ -44,7 +44,7 @@ const checkCart = async (userId, itemId, optionId) => {
             AND item_id = ?
             AND (
                 IF (
-                    ?,
+                    ? = 1,
                     option_id = 1,
                     option_id IS NULL
                 )
@@ -64,7 +64,7 @@ const updateCart = async (userId, itemId, quantity, optionId) => {
         AND item_id = ?
         AND (
             IF (
-                ?,
+                ? = 1,
                 option_id = 1,
                 option_id IS NULL
             )
@@ -82,7 +82,7 @@ const deleteCart= async (userId, itemId, optionId) => {
         AND item_id = ?
         AND (
             IF (
-                ?,
+                ? = 1,
                 option_id = 1,
                 option_id IS NULL
             )
