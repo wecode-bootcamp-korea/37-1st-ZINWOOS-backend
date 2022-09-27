@@ -4,10 +4,6 @@ const { asyncWrap } = require('../utils/error');
 const addCart = asyncWrap(async (req, res) => {
     const userId = req.user.id
     const { itemId, optionId, quantity } = req.body;
-    console.log(itemId)
-    console.log(optionId)
-    console.log(typeof optionId)
-    console.log(quantity)
 
     if ( !userId || !itemId || !quantity ) {
         const error = new Error('KEY_ERROR');
@@ -51,12 +47,14 @@ const deleteCart = asyncWrap(async (req, res) => {
     const userId = req.user.id;
     const { itemId } = req.query;
     const { optionId } = req.body;
+    console.log(itemId)
+    console.log(optionId)
 
     if ( !userId || !itemId ) {
         const error = new Error('KEY_ERROR');
         error.statusCode = 400;
         throw error;
-    }
+    }rs
     
     for (let i in itemId) {
         await cartService.deleteCart(+userId, +itemId[i], optionId[i])

@@ -54,7 +54,7 @@ const getAllCartList = async (userId, limit, offset) => {
 
 const checkWithOption = async (userId, itemId, optionId) => {
     const [result] = await dataSource.query(
-        `SELECT id
+        `SELECT *
         FROM carts
         WHERE EXISTS (
             SELECT *
@@ -71,7 +71,7 @@ const checkWithOption = async (userId, itemId, optionId) => {
 
 const checkWithNoOption = async (userId, itemId) => {
     const [result] = await dataSource.query(
-        `SELECT id
+        `SELECT *
         FROM carts
         WHERE EXISTS (
             SELECT *
