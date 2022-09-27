@@ -1,22 +1,5 @@
 const dataSource = require('./data-source')
 
-const getUserById = async (userId) => {
-    const [ result ] = await dataSource.query(
-        `SELECT
-            id,
-            name,
-            email,
-            password,
-            address,
-            phone_number
-        FROM users
-        WHERE id = ?
-        `, [userId]
-    )
-
-    return result;
-}
-
 const createCartList = async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
         `INSERT INTO carts(
@@ -52,98 +35,71 @@ const getAllCartList = async (userId, limit, offset) => {
     return result;
 }
 
-const checkWithOption = async (userId, itemId, optionId) => {
+const checkCart = async (userId, itemId, optionId) => {
     const [result] = await dataSource.query(
-        `SELECT *
-        FROM carts
-        WHERE EXISTS (
-            SELECT *
+        `SELECT EXISTS  (
+            SELECT id 
             FROM carts
             WHERE user_id = ?
             AND item_id = ?
-            AND option_id = ?
-        )
+            AND (
+                IF (
+                    ?,
+                    option_id = 1,
+                    option_id IS NULL
+                )
+            )
+        ) AS is_existed
         `, [userId, itemId, optionId]
     )
-
-    return result;
+    
+    return result.is_existed;
 }
 
-const checkWithNoOption = async (userId, itemId) => {
-    const [result] = await dataSource.query(
-        `SELECT *
-        FROM carts
-        WHERE EXISTS (
-            SELECT *
-            FROM carts
-            WHERE user_id = ?
-            AND item_id = ?
-            AND option_id IS NULL
-        )
-        `, [userId, itemId]
-    )
-
-    return result;
-}
-
-const updateWithOption= async (userId, itemId, quantity, optionId) => {
+const updateCart = async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
         `UPDATE carts
         SET quantity = carts.quantity + ?
         WHERE user_id = ?
         AND item_id = ?
-        AND option_id = ?
+        AND (
+            IF (
+                ?,
+                option_id = 1,
+                option_id IS NULL
+            )
+        )
         `, [quantity, userId, itemId, optionId]
     )
 
     return result;
 }
 
-const updateWithNoOption= async (userId, itemId, quantity) => {
-    const result = await dataSource.query(
-        `UPDATE carts
-        SET quantity = carts.quantity + ?
-        WHERE user_id = ?
-        AND item_id = ?
-        AND option_id IS NULL
-        `, [quantity, userId, itemId]
-    )
-
-    return result;
-}
-
-const deleteWithOption= async (userId, itemId, optionId) => {
+const deleteCart= async (userId, itemId, optionId) => {
     const result = await dataSource.query(
         `DELETE FROM carts
         WHERE user_id = ?
         AND item_id = ?
-        AND option_id = ?
+        AND (
+            IF (
+                ?,
+                option_id = 1,
+                option_id IS NULL
+            )
+        )
         `, [userId, itemId, optionId]
     )
 
     return result;
 }
 
-const deleteWithNoOption= async (userId, itemId) => {
-    const result = await dataSource.query(
-        `DELETE FROM carts
-        WHERE user_id = ?
-        AND item_id = ?
-        AND option_id IS NULL
-        `, [userId, itemId]
-    )
 
-    return result;
-}
+
 
 module.exports = {
-    getUserById,
     createCartList,
     getAllCartList,
-    checkWithOption,
-    checkWithNoOption,
-    updateWithOption,
-    updateWithNoOption,
-    deleteWithOption,
-    deleteWithNoOption
+    checkCart,
+    updateCart,
+    deleteCart
 }

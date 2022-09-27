@@ -5,7 +5,6 @@ CREATE TABLE orders(
     item_id INT NOT NULL,
     option_id INT NULL,
     quantity INT NOT NULL,
-    price DECIMAL(10, 8) NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -16,3 +15,4 @@ CREATE TABLE orders(
 
 -- migrate:down
 DROP TABLE orders
+

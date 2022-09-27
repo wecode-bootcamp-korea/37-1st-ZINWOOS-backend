@@ -1,26 +1,10 @@
+const { userDao } = require('../models')
 const { cartDao } = require('../models')
 
 const addCart = async(userId, itemId, quantity, optionId) => {
 
-    if (optionId === null) {
-        const user = await cartDao.getUserById(userId);
-        const check = await cartDao.checkWithNoOption(userId, itemId);
-
-        if (!user) {
-            const error = new Error('INVALID_USER');
-            error.statusCode = 401;
-            throw error;
-        }
-        
-        if (check) {
-            return await cartDao.updateWithNoOption(userId, itemId, quantity);
-        }
-
-        return await cartDao.createCartList(userId, itemId, quantity, optionId);
-    }
-
-    const user = await cartDao.getUserById(userId);
-    const check = await cartDao.checkWithNoOption(userId, itemId, optionId);
+    const user = await userDao.getUserById(userId);
+    const check = await cartDao.checkCart(userId, itemId, optionId);
 
     if (!user) {
         const error = new Error('INVALID_USER');
@@ -28,8 +12,8 @@ const addCart = async(userId, itemId, quantity, optionId) => {
         throw error;
     }
         
-    if (check) {
-        return await cartDao.updateWithOption(userId, itemId, quantity, optionId);
+    if (check !== '0') {
+        return await cartDao.updateCart(userId, itemId, quantity, optionId);
     }
 
     return await cartDao.createCartList(userId, itemId, quantity, optionId);
@@ -40,20 +24,8 @@ const getCartList = async ( userId, limit, offset ) => {
 }
 
 const deleteCart = async (userId, itemId, optionId) => {
-    
-    if (optionId === null) {
-        const match = await cartDao.checkWithNoOption(userId, itemId);
 
-        if (!match) {
-            const error = new Error('INVALID_ITEM');
-            error.statusCode = 404;
-            throw error;
-        }
-        
-        return await cartDao.deleteWithNoOption(userId, itemId);
-    }
-
-    const match = await cartDao.checkWithOption(userId, itemId, optionId);
+    const match = await cartDao.checkCart(userId, itemId, optionId);
 
     if (!match) {
         const error = new Error('INVALID_ITEM');
@@ -61,7 +33,7 @@ const deleteCart = async (userId, itemId, optionId) => {
         throw error;
     }
     
-    return await cartDao.deleteWithOption(userId, itemId, optionId);    
+    return await cartDao.deleteCart(userId, itemId, optionId);    
 }
 
 module.exports = {

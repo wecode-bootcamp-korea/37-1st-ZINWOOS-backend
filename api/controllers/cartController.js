@@ -40,7 +40,7 @@ const getCartList = asyncWrap(async(req, res) => {
 
     const cartList = await cartService.getCartList(+userId, +limit, +offset)
 
-    res.status(201).json({ cartList })
+    res.status(200).json({ cartList })
 })
 
 const deleteCart = asyncWrap(async (req, res) => {
@@ -54,7 +54,7 @@ const deleteCart = asyncWrap(async (req, res) => {
         const error = new Error('KEY_ERROR');
         error.statusCode = 400;
         throw error;
-    }rs
+    }
     
     for (let i in itemId) {
         await cartService.deleteCart(+userId, +itemId[i], optionId[i])
