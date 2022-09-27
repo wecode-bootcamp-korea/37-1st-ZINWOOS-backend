@@ -12,7 +12,7 @@ const addCart = async(userId, itemId, quantity, optionId) => {
     }
     
     if (check) {
-        return await cartDao.addQuantity(userId, itemId, quantity, optionId);
+        return await cartDao.updateCart(userId, itemId, quantity, optionId);
     }
 
     return await cartDao.createCartList(userId, itemId, quantity, optionId);

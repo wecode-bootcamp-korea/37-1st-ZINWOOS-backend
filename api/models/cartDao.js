@@ -17,7 +17,7 @@ const getUserById = async (userId) => {
     return result;
 }
 
-const createCartList = async (userId, itemId, optionId, quantity) => {
+const createCartList = async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
         `INSERT INTO carts(
             user_id,
@@ -54,19 +54,23 @@ const getAllCartList = async (userId, limit, offset) => {
 
 const checkOverlap = async (userId, itemId, optionId) => {
     const [ result ] = await dataSource.query(
-        `SELECT *
+        `SELECT id
         FROM carts
-        WHERE user_id = ?
-        AND item_id = ?
-        AND (option_id = ?
-        OR option_id IS NULL)
+        WHERE EXISTS(
+            SELECT *
+            FROM carts
+            WHERE user_id = ?
+            AND item_id = ?
+            AND (option_id = ?
+            OR option_id IS NULL)
+        )
         `, [userId, itemId, optionId]
     )
 
     return result;
 }
 
-const addQuantity = async (userId, itemId, quantity, optionId) => {
+const updateCart= async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
         `UPDATE carts
         SET quantity = carts.quantity + ?
@@ -75,15 +79,6 @@ const addQuantity = async (userId, itemId, quantity, optionId) => {
         AND (option_id = ?
         OR option_id IS NULL)
         `, [quantity, userId, itemId, optionId]
-    )
-
-    return result;
-}
-
-const resetCartListId = async () => {
-    const result = await dataSource.query(
-        `ALTER TABLE carts AUTO_INCREMENT = 1
-        `
     )
 
     return result;
@@ -107,7 +102,6 @@ module.exports = {
     createCartList,
     getAllCartList,
     checkOverlap,
-    addQuantity,
-    resetCartListId,
+    updateCart,
     deleteCartList
 }
