@@ -22,10 +22,10 @@ const createCartList = async (userId, itemId, quantity, optionId) => {
         `INSERT INTO carts(
             user_id,
             item_id,
-            option_id,
-            quantity
+            quantity,
+            option_id
         ) VALUES (?, ?, ?, ?)
-        `, [userId, itemId, optionId, quantity]
+        `, [userId, itemId, quantity, optionId]
     )
 
     return result;
@@ -52,17 +52,16 @@ const getAllCartList = async (userId, limit, offset) => {
     return result;
 }
 
-const checkOverlap = async (userId, itemId, optionId) => {
-    const [ result ] = await dataSource.query(
+const checkWithOption = async (userId, itemId, optionId) => {
+    const [result] = await dataSource.query(
         `SELECT id
         FROM carts
-        WHERE EXISTS(
+        WHERE EXISTS (
             SELECT *
             FROM carts
             WHERE user_id = ?
             AND item_id = ?
-            AND (option_id = ?
-            OR option_id IS NULL)
+            AND option_id = ?
         )
         `, [userId, itemId, optionId]
     )
@@ -70,28 +69,68 @@ const checkOverlap = async (userId, itemId, optionId) => {
     return result;
 }
 
-const updateCart= async (userId, itemId, quantity, optionId) => {
+const checkWithNoOption = async (userId, itemId) => {
+    const [result] = await dataSource.query(
+        `SELECT id
+        FROM carts
+        WHERE EXISTS (
+            SELECT *
+            FROM carts
+            WHERE user_id = ?
+            AND item_id = ?
+            AND option_id IS NULL
+        )
+        `, [userId, itemId]
+    )
+
+    return result;
+}
+
+const updateWithOption= async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
         `UPDATE carts
         SET quantity = carts.quantity + ?
         WHERE user_id = ?
         AND item_id = ?
-        AND (option_id = ?
-        OR option_id IS NULL)
+        AND option_id = ?
         `, [quantity, userId, itemId, optionId]
     )
 
     return result;
 }
 
-const deleteCartList= async (userId, itemId, optionId) => {
+const updateWithNoOption= async (userId, itemId, quantity) => {
+    const result = await dataSource.query(
+        `UPDATE carts
+        SET quantity = carts.quantity + ?
+        WHERE user_id = ?
+        AND item_id = ?
+        AND option_id IS NULL
+        `, [quantity, userId, itemId]
+    )
+
+    return result;
+}
+
+const deleteWithOption= async (userId, itemId, optionId) => {
     const result = await dataSource.query(
         `DELETE FROM carts
         WHERE user_id = ?
         AND item_id = ?
-        AND (option_id = ?
-        OR option_id IS NULL)
+        AND option_id = ?
         `, [userId, itemId, optionId]
+    )
+
+    return result;
+}
+
+const deleteWithNoOption= async (userId, itemId) => {
+    const result = await dataSource.query(
+        `DELETE FROM carts
+        WHERE user_id = ?
+        AND item_id = ?
+        AND option_id IS NULL
+        `, [userId, itemId]
     )
 
     return result;
@@ -101,7 +140,10 @@ module.exports = {
     getUserById,
     createCartList,
     getAllCartList,
-    checkOverlap,
-    updateCart,
-    deleteCartList
+    checkWithOption,
+    checkWithNoOption,
+    updateWithOption,
+    updateWithNoOption,
+    deleteWithOption,
+    deleteWithNoOption
 }

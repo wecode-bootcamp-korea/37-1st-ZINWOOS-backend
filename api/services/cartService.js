@@ -3,7 +3,24 @@ const { cartDao } = require('../models')
 const addCart = async(userId, itemId, quantity, optionId) => {
 
     const user = await cartDao.getUserById(userId);
-    const check = await cartDao.checkOverlap(userId, itemId, optionId);
+
+    if (optionId === null) {
+        const check = await cartDao.checkWithNoOption(userId, itemId);
+
+        if (!user) {
+            const error = new Error('INVALID_USER');
+            error.statusCode = 401;
+            throw error;
+        }
+        
+        if (check) {
+            return await cartDao.updateWithNoOption(userId, itemId, quantity);
+        }
+
+        return await cartDao.createCartList(userId, itemId, quantity, optionId);
+    }
+
+    const check = await cartDao.checkWithOption(userId, itemId, optionId);
 
     if (!user) {
         const error = new Error('INVALID_USER');
@@ -12,7 +29,7 @@ const addCart = async(userId, itemId, quantity, optionId) => {
     }
     
     if (check) {
-        return await cartDao.updateCart(userId, itemId, quantity, optionId);
+        return await cartDao.updateWithOption(userId, itemId, quantity, optionId);
     }
 
     return await cartDao.createCartList(userId, itemId, quantity, optionId);
@@ -28,7 +45,19 @@ const resetCartList = async () => {
 
 const deleteCart = async (userId, itemId, optionId) => {
     
-    const match = await cartDao.checkOverlap(userId, itemId, optionId);
+    if (optionId === null) {
+        const match = await cartDao.checkWithNoOption(userId, itemId);
+
+        if (!match) {
+            const error = new Error('INVALID_ITEM');
+            error.statusCode = 404;
+            throw error;
+        }
+        
+        return await cartDao.deleteWithNoOption(userId, itemId);
+    }
+
+    const match = await cartDao.checkWithOption(userId, itemId, optionId);
 
     if (!match) {
         const error = new Error('INVALID_ITEM');
@@ -36,7 +65,7 @@ const deleteCart = async (userId, itemId, optionId) => {
         throw error;
     }
     
-    return await cartDao.deleteCartList(userId, itemId, optionId);    
+    return await cartDao.deleteWithOption(userId, itemId, optionId);    
 }
 
 module.exports = {
