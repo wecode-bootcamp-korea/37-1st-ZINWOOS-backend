@@ -35,9 +35,6 @@ const signUp = async (name, email, password, address, phoneNumber) => {
 }
 
 const signIn = async (email, password) => {
-    validator.validateEmail(email);
-    validator.validatePassword(password);
-
     const user = await userDao.getUserByEmail(email);
 
     if (!user) {
