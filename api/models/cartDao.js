@@ -35,14 +35,33 @@ const getAllCartList = async (userId, limit, offset) => {
     return result;
 }
 
-const checkCart = async (userId, cart) => {
+const checkCart = async (userId, itemId, optionId) => {
+    const [result] = await dataSource.query(
+        `SELECT EXISTS (
+            SELECT id
+            FROM carts
+            WHERE user_id = ?
+            AND item_id = ?
+            AND IF (
+                ? = 1,
+                option_id = 1,
+                option_id IS NULL
+            )
+        ) AS a
+        `, [userId, itemId, optionId]
+    )
+
+    return result.a;
+}
+
+const checkCartById = async (userId, cart) => {
     const [result] = await dataSource.query(
         `SELECT EXISTS  (
             SELECT id 
             FROM carts
             WHERE user_id = ?
             AND id IN (?)
-        ) a
+        ) AS a
         `, [userId, cart]
     )
 
@@ -86,6 +105,7 @@ module.exports = {
     createCartList,
     getAllCartList,
     checkCart,
+    checkCartById,
     updateCart,
     deleteCart
 }

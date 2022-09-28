@@ -25,7 +25,7 @@ const getCartList = async ( userId, limit, offset ) => {
 
 const deleteCart = async (userId, cart) => {
 
-    const match = await cartDao.checkCart(userId, cart);
+    const match = await cartDao.checkCartById(userId, cart);
 
     if (!match) {
         const error = new Error('INVALID_ITEM');
