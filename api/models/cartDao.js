@@ -17,7 +17,7 @@ const createCartList = async (userId, itemId, quantity, optionId) => {
 const getAllCartList = async (userId, limit, offset) => {
     const result = await dataSource.query(
         `SELECT
-            i.id,
+            c.id,
             i.name,
             i.price,
             i.detail_image,
@@ -35,25 +35,18 @@ const getAllCartList = async (userId, limit, offset) => {
     return result;
 }
 
-const checkCart = async (userId, itemId, optionId) => {
+const checkCart = async (userId, cart) => {
     const [result] = await dataSource.query(
         `SELECT EXISTS  (
             SELECT id 
             FROM carts
             WHERE user_id = ?
-            AND item_id = ?
-            AND (
-                IF (
-                    ? = 1,
-                    option_id = 1,
-                    option_id IS NULL
-                )
-            )
-        ) AS is_existed
-        `, [userId, itemId, optionId]
+            AND id IN (?)
+        ) a
+        `, [userId, cart]
     )
-    
-    return result.is_existed;
+
+    return result.a;
 }
 
 const updateCart = async (userId, itemId, quantity, optionId) => {
@@ -75,19 +68,12 @@ const updateCart = async (userId, itemId, quantity, optionId) => {
     return result;
 }
 
-const deleteCart= async (userId, itemId, optionId) => {
+const deleteCart= async (userId, cart) => {
     const result = await dataSource.query(
         `DELETE FROM carts
         WHERE user_id = ?
-        AND item_id = ?
-        AND (
-            IF (
-                ? = 1,
-                option_id = 1,
-                option_id IS NULL
-            )
-        )
-        `, [userId, itemId, optionId]
+        AND id IN (?)
+        `, [userId, cart]
     )
 
     return result;
