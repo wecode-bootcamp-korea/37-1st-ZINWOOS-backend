@@ -2,3 +2,4 @@
 node_modules/
 schema.sql
 .vscode
+.DS_Store
