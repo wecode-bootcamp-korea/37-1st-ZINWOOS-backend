@@ -3,3 +3,5 @@ node_modules/
 schema.sql
 .vscode
 .DS_Store
+api/.DS_Store
+api/services/.DS_Store
