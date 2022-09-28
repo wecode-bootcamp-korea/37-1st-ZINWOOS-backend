@@ -10,7 +10,6 @@ const { globalErrorHandler } = require('./api/utils/error');
 app.use(cors());
 app.use(morgan('combined'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
 app.use(routes);
 app.use(globalErrorHandler);
 

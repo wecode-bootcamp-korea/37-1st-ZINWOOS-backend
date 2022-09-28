@@ -55,7 +55,7 @@ const checkCart = async (userId, itemId, optionId) => {
     return result.a;
 }
 
-const checkCartById = async (userId, cart) => {
+const checkCartById = async (userId, cartId) => {
     const [result] = await dataSource.query(
         `SELECT EXISTS  (
             SELECT id 
@@ -63,7 +63,7 @@ const checkCartById = async (userId, cart) => {
             WHERE user_id = ?
             AND id IN (?)
         ) AS a
-        `, [userId, cart]
+        `, [userId, cartId]
     )
 
     return result.a;

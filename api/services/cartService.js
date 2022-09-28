@@ -27,7 +27,7 @@ const deleteCart = async (userId, cartId) => {
 
     const match = await cartDao.checkCartById(userId, cartId);
 
-    if (!match) {
+    if (match === '0') {
         const error = new Error('INVALID_ITEM');
         error.statusCode = 404;
         throw error;
