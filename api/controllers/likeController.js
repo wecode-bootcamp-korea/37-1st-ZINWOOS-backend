@@ -27,17 +27,15 @@ const addLikes = asyncWrap(async(req, res) => {
 
 
 const delLikes = asyncWrap(async(req, res) => {
-  const itemId = req.params;
+  const itemId = req.params.itemId;
   const userId = req.user;
-  console.log(itemId)
-  console.log(userId)
   
   if (!itemId || !userId) {
     return res.status(400).json({ message : 'KEY_ERROR' });
   }
 
-  await likeService.delLikes(itemId, userId);
-  res.status(204).json({ message : 'ITEM_DISLIKED' });
+  await likeService.delLikes(+itemId, userId);
+  res.status(204).send();
 });
 
 module.exports = {
