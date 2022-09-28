@@ -11,6 +11,7 @@ const readItem = async (itemId) => {
       items.price as price,
       items.detail,
       items.detail_image,
+      items.max_amount,
       options.name as option_name,
       options.price as option_price,
       JSON_ARRAYAGG(item_images.image_URL) as image_url
