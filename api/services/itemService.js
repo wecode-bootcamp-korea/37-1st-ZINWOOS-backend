@@ -13,8 +13,14 @@ const getItemMain = async () => {
     return data;
 }
 
+const getItemById = async (itemId) => {
+  const item = await itemDao.readItem(itemId);
+  return item;
+}
+
 module.exports = {
-    getItemMain,
-    getItems,
-    getAllItems
+  getItemById,
+  getItemMain,
+  getItems,
+  getAllItems
 }
