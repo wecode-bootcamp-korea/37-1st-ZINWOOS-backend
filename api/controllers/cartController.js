@@ -47,16 +47,13 @@ const deleteCart = asyncWrap(async (req, res) => {
     const userId = req.user.id;
     const { cartId } = req.query;
 
-    let cart = cartId.map(x => +x)
-    console.log(cart)
-    
-    if ( !userId || !cart ) {
+    if ( !userId || !cartId ) {
         const error = new Error('KEY_ERROR');
         error.statusCode = 400;
         throw error;
     }
     
-    await cartService.deleteCart(+userId, cart)
+    await cartService.deleteCart(+userId, cartId)
 
     res.status(200).json({ message:'DELETE_SUCCESS'})
 })

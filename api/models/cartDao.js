@@ -18,6 +18,7 @@ const getAllCartList = async (userId, limit, offset) => {
     const result = await dataSource.query(
         `SELECT
             c.id,
+            i.id as itemId,
             i.name,
             i.price,
             i.detail_image,
@@ -87,12 +88,12 @@ const updateCart = async (userId, itemId, quantity, optionId) => {
     return result;
 }
 
-const deleteCart= async (userId, cart) => {
+const deleteCart= async (userId, cartId) => {
     const result = await dataSource.query(
         `DELETE FROM carts
         WHERE user_id = ?
         AND id IN (?)
-        `, [userId, cart]
+        `, [userId, cartId]
     )
 
     return result;
