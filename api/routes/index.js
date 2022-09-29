@@ -8,10 +8,14 @@ const likeRouter = require('./likeRouter')
 
 const router = express.Router();
 
+const userRouter = require('./userRouter');
+const itemRouter = require('./itemRouter');
+
 router.use('/users', userRouter);
+router.use('/posts', itemRouter);
 router.use('/carts', cartRouter);
-router.use('/items', itemRouter);
 router.use('/orders', orderRouter);
 router.use('/likes', likeRouter);
+
 
 module.exports = router;
