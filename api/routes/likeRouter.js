@@ -6,6 +6,6 @@ const likeRouter = express.Router();
 
 likeRouter.get('', loginRequired, likeController.getLikes);
 likeRouter.post('', loginRequired, likeController.addLikes);
-likeRouter.delete('/:itemId', loginRequired, likeController.delLikes);
+likeRouter.delete('/:itemId', loginRequired, likeController.deleteLikes);
 
 module.exports = likeRouter;

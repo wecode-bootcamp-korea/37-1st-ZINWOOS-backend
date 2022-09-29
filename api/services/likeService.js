@@ -10,13 +10,13 @@ const addLikes = async (itemId, userId) => {
 }
 
 
-const delLikes = async (itemId, userId) => {
-  return await likeDao.delLikes(itemId, userId);
+const deleteLikes = async (itemId, userId) => {
+  return await likeDao.deleteLikes(itemId, userId);
 }
 
 
 module.exports = {
   getLikes,
   addLikes,
-  delLikes
+  deleteLikes
 }

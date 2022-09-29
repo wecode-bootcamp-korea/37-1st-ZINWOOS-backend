@@ -28,7 +28,7 @@ const addLikes = async (itemId, userId) => {
 };
 
 
-const delLikes = async (itemId, userId) => {
+const deleteLikes = async (itemId, userId) => {
   const deletedLike = (await dataSource.query(
     `DELETE FROM likes
     WHERE item_id =? AND user_id =?;
@@ -44,5 +44,5 @@ const delLikes = async (itemId, userId) => {
 module.exports = {
   getLikes,
   addLikes,
-  delLikes
+  deleteLikes
 };
