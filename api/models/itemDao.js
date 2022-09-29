@@ -20,6 +20,8 @@ const getAll = async ( sort, order, limit, offset) => {
     sub_categories.main_category_id,
     main_categories.id as main_cate_id,
     main_categories.name as main_cate_name,
+    main_categories.description as main_description,
+    main_categories.image as main_image,
     likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
@@ -58,6 +60,8 @@ const getMainList = async ( main_category_id, sort, order, limit, offset) => {
     sub_categories.main_category_id,
     main_categories.id as main_cate_id,
     main_categories.name as main_cate_name,
+    main_categories.description as main_description,
+    main_categories.image as main_image,
     likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
@@ -96,6 +100,7 @@ const getSubList = async ( sub_category_id, sort, order, limit, offset) => {
     sub_categories.id as sub_cate_id,
     sub_categories.name as sub_cate_name,
     sub_categories.main_category_id,
+    main_categories.image as main_image,
     likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
