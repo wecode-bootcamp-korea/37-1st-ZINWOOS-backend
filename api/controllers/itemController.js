@@ -2,8 +2,11 @@ const { itemService } = require('../services');
 const { asyncWrap } = require('../utils/error');
 
 const getAll = asyncWrap(async (req, res) => {
-    const { sort, order, limit, offset } = req.query
-    // const { main_category_id } = req.params
+    const { sort, order } = req.query
+    let { limit, offset } = req.query
+
+    limit = limit || 50
+    offset = offset || 0
 
     if(limit > 100) {
         throw new Error("Too Many Datas");
@@ -14,39 +17,39 @@ const getAll = asyncWrap(async (req, res) => {
     return res.status(200).json({ data });
 })
 
-const getAllItems = asyncWrap(async (req, res) => {
-    const { idx, sort, order, limit, offset } = req.query
+const getMainList = asyncWrap(async (req, res) => {
+    const { main_category_id, sort, order, limit, offset } = req.query
 
     if(limit > 100) {
         throw new Error("Too Many Datas");
     }
 
-    const data = await itemService.getAllItems( idx, sort, order, +limit, +offset );
+    const data = await itemService.getMainList( main_category_id, sort, order, +limit, +offset );
 
     return res.status(200).json({ data });
 })
 
-const getItems = asyncWrap(async (req, res) => {
-    const { idx,sort, order, limit, offset} = req.query
+const getSubList = asyncWrap(async (req, res) => {
+    const { sub_category_id, sort, order, limit, offset} = req.query
 
     if(limit > 100) {
         throw new Error("Too Many Datas");
     }
 
-    const data = await itemService.getItems( idx,sort, order, +limit, +offset );
+    const data = await itemService.getSubList( sub_category_id, sort, order, +limit, +offset );
 
     return res.status(200).json({ data });
 })
 
-const getItemMain = asyncWrap(async (req,res) => {
-    const data = await itemService.getItemMain();
+const getNewList = asyncWrap(async (req,res) => {
+    const data = await itemService.getNewList();
 
     return res.status(200).json({data});
 }) 
 
 module.exports = {
-    getItems,
-    getItemMain,
-    getAllItems,
+    getSubList,
+    getNewList,
+    getMainList,
     getAll
 }

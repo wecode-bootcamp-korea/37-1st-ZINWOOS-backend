@@ -4,22 +4,22 @@ const getAll = async ( sort, order, limit, offset) => {
     return await itemDao.getAll( sort, order, limit, offset );
 }
 
-const getAllItems = async ( idx, sort, order, limit, offset) => {
-    return await itemDao.getAllItems( idx, sort, order, limit, offset );
+const getMainList = async ( main_category_id, sort, order, limit, offset) => {
+    return await itemDao.getMainList( main_category_id, sort, order, limit, offset );
 }
 
-const getItems = async ( idx,sort, order, limit, offset) => {
-    return await itemDao.getItems( idx,sort, order, limit, offset);
+const getSubList = async ( sub_category_id, sort, order, limit, offset) => {
+    return await itemDao.getSubList( sub_category_id,sort, order, limit, offset);
 }
 
-const getItemMain = async () => {
-    const data = await itemDao.getItemMain();
+const getNewList = async () => {
+    const data = await itemDao.getNewList();
     return data;
 }
 
 module.exports = {
-    getItemMain,
-    getItems,
-    getAllItems,
+    getNewList,
+    getSubList,
+    getMainList,
     getAll
 }

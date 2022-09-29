@@ -20,7 +20,7 @@ const getAll = async ( sort, order, limit, offset) => {
     sub_categories.main_category_id,
     main_categories.id as main_cate_id,
     main_categories.name as main_cate_name,
-    likes.item_id as likesItemId
+    likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
             ON items.id = tags_items.item_id
@@ -32,14 +32,13 @@ const getAll = async ( sort, order, limit, offset) => {
             ON sub_categories.main_category_id = main_categories.id
         LEFT JOIN likes
             ON items.id = likes.item_id
-        WHERE main_categories.id >= 1 AND main_categories.id <= 3
         ORDER BY ${sort} ${order} LIMIT ? OFFSET ?
 `, [ limit, offset]
 ); 
 return result;
 }
 
-const getAllItems = async ( idx, sort, order, limit, offset) => {
+const getMainList = async ( main_category_id, sort, order, limit, offset) => {
     const result = await dataSource.query(`
     SELECT 
     items.id as items_id,
@@ -59,7 +58,7 @@ const getAllItems = async ( idx, sort, order, limit, offset) => {
     sub_categories.main_category_id,
     main_categories.id as main_cate_id,
     main_categories.name as main_cate_name,
-    likes.item_id as likesItemId
+    likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
             ON items.id = tags_items.item_id
@@ -71,15 +70,15 @@ const getAllItems = async ( idx, sort, order, limit, offset) => {
             ON sub_categories.main_category_id = main_categories.id
         LEFT JOIN likes
             ON items.id = likes.item_id
-        WHERE main_categories.id = ${idx} 
-        AND sub_categories.main_category_id = ${idx}
+        WHERE main_categories.id = ${main_category_id} 
+        AND sub_categories.main_category_id = ${main_category_id}
         ORDER BY ${sort} ${order} LIMIT ? OFFSET ?
 `, [ limit, offset]
 ); 
 return result;
 }
 
-const getItems = async ( idx, sort, order, limit, offset) => {
+const getSubList = async ( sub_category_id, sort, order, limit, offset) => {
     const result = await dataSource.query(`
     SELECT 
     items.id as items_id,
@@ -97,7 +96,7 @@ const getItems = async ( idx, sort, order, limit, offset) => {
     sub_categories.id as sub_cate_id,
     sub_categories.name as sub_cate_name,
     sub_categories.main_category_id,
-    likes.item_id as likesItemId
+    likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
             ON items.id = tags_items.item_id
@@ -109,12 +108,12 @@ const getItems = async ( idx, sort, order, limit, offset) => {
             ON items.id = likes.item_id
         WHERE items.sub_category_id = ?
         ORDER BY ${sort} ${order} LIMIT ? OFFSET ?
-`, [ idx, limit, offset]
+`, [ sub_category_id, limit, offset]
 ); 
 return result;
 }
 
-const getItemMain = async () => {
+const getNewList = async () => {
     const result = await dataSource.query(`
     SELECT
         items.id,
@@ -133,8 +132,8 @@ const getItemMain = async () => {
         }
         
 module.exports = {
-    getItemMain,
-    getItems,
-    getAllItems,
+    getNewList,
+    getSubList,
+    getMainList,
     getAll
 }

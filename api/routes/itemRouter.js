@@ -2,9 +2,9 @@ const express  = require('express');
 const { itemController } = require('../controllers');
 const itemRouter = express.Router();
 
-itemRouter.get('/main', itemController.getAllItems);
-itemRouter.get('/sub', itemController.getItems);
-itemRouter.get('/new', itemController.getItemMain);
+itemRouter.get('/main', itemController.getMainList);
+itemRouter.get('/sub', itemController.getSubList);
+itemRouter.get('/new', itemController.getNewList);
 itemRouter.get('/all', itemController.getAll);
 
 module.exports = itemRouter;
