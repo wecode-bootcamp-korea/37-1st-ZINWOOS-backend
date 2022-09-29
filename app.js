@@ -6,7 +6,6 @@ const app = express();
 const morgan = require('morgan');
 const routes = require('./api/routes');
 const { globalErrorHandler } = require('./api/utils/error');
-const bodyParser = require('body-parser');
 
 app.use(cors());
 app.use(morgan('combined'));
