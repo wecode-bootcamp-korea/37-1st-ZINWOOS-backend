@@ -14,7 +14,7 @@ const createCartList = async (userId, itemId, quantity, optionId) => {
     return result;
 }
 
-const getAllCartList = async (userId, limit, offset) => {
+const getAllCart= async (userId, limit, offset) => {
     const result = await dataSource.query(
         `SELECT
             c.id,
@@ -69,7 +69,7 @@ const checkCartById = async (userId, cartId) => {
     return result.a;
 }
 
-const updateCart = async (userId, itemId, quantity, optionId) => {
+const updateCart = async (userId, itemId, optionId, quantity) => {
     const result = await dataSource.query(
         `UPDATE carts
         SET quantity = carts.quantity + ?
@@ -88,6 +88,26 @@ const updateCart = async (userId, itemId, quantity, optionId) => {
     return result;
 }
 
+const plusQuantity = async (cartId) => {
+    const result = await dataSource.quary(
+        `UPDATE carts
+        SET quantity = quantity + 1
+        WHERE id = ?
+        `, [cartId]
+    )
+
+    return result;
+}
+
+const minusQuantity = async (cartId) => {
+    const result = await dataSource.quary(
+        `UPDATE carts;
+        SET quantity = quantity - 1
+        WHERE id = ?
+        `, [cartId]
+    )
+}
+
 const deleteCart= async (userId, cartId) => {
     const result = await dataSource.query(
         `DELETE FROM carts
@@ -104,9 +124,11 @@ const deleteCart= async (userId, cartId) => {
 
 module.exports = {
     createCartList,
-    getAllCartList,
+    getAllCart,
     checkCart,
     checkCartById,
     updateCart,
+    plusQuantity,
+    minusQuantity,
     deleteCart
 }

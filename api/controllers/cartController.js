@@ -5,7 +5,7 @@ const addCart = asyncWrap(async (req, res) => {
     const userId = req.user.id
     const { itemId, optionId, quantity } = req.body;
 
-    if ( !userId || !itemId || !quantity ) {
+    if (!itemId || !quantity) {
         const error = new Error('KEY_ERROR');
         error.statusCode = 400; 
         throw error;
@@ -17,16 +17,16 @@ const addCart = asyncWrap(async (req, res) => {
         throw error;
     }
 
-    const addCart = await cartService.addCart(userId, itemId, quantity, optionId)
+    await cartService.addCart(userId, itemId, quantity, optionId)
 
     res.status(201).json({ message:'Item added successfully' })
 })
 
-const getCartList = asyncWrap(async(req, res) => {
+const getCart = asyncWrap(async(req, res) => {
     const userId = req.user.id;
     const { limit, offset } = req.query;
 
-    if (!userId || !limit || !offset ) {
+    if (!limit || !offset ) {
         const error = new Error('KEY_ERROR');
         error.statusCode = 400;
         throw error;
@@ -38,16 +38,42 @@ const getCartList = asyncWrap(async(req, res) => {
         throw error;
     }
 
-    const cartList = await cartService.getCartList(+userId, +limit, +offset)
+    const cartList = await cartService.getCartList(+userId, +limit, +offset);
 
-    res.status(200).json({ cartList })
+    res.status(200).json({ cartList });
+})
+
+const plusQuantity = asyncWrap(async (req, res) => {
+    const { cartId } = req.body;
+
+    if (!cartId) {
+        const error = new Error('KEY_ERROR');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    await cartService.plusQuantity(cartId);
+
+    res.status(204).send()
+})
+
+const minusQuantity = asyncWrap(async (req, res) => {
+    const { cartId } = req.body;
+
+    if (!cartId) {
+        const error = new Error('KEY_ERROR');
+        error.statusCode = 400;
+        throw error;
+    }
+
+    await cartService.minusQuantity(cartId)
 })
 
 const deleteCart = asyncWrap(async (req, res) => {
     const userId = req.user.id;
     const { cartId } = req.query;
 
-    if ( !userId || !cartId ) {
+    if (!cartId) {
         const error = new Error('KEY_ERROR');
         error.statusCode = 400;
         throw error;
@@ -60,6 +86,8 @@ const deleteCart = asyncWrap(async (req, res) => {
 
 module.exports = {
     addCart,
-    getCartList,
+    getCart,
+    plusQuantity,
+    minusQuantity,
     deleteCart
 }

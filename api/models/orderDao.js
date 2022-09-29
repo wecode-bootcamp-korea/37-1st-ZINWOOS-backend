@@ -1,10 +1,9 @@
 const dataSource = require('./data-source');
 
-const addOrderList = async (userId, itemId, quantity) => {
+const addOrderList = async (userId, items) => {
+
     let tmp = "";
-    for (let i in itemId) {
-        tmp += `(${userId}, ${itemId[i]}, ${quantity[i]}),`
-    }
+    items.map(el => tmp += `(${userId}, ${el.itemId}, ${el.quantity}),`)
     tmp = tmp.slice(0,-1);
 
     const result = await dataSource.query(
@@ -15,7 +14,6 @@ const addOrderList = async (userId, itemId, quantity) => {
         ) VALUES ${tmp}
         `
     )
-
     return result;
 }
 

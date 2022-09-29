@@ -2,25 +2,29 @@ const { cartDao } = require('../models')
 const { orderDao } = require('../models');
 const dataSource = require('../models/data-source');
 
-const pullOrder = async (userId, cartId, itemId, quantity) => {
+const addOrder = async (userId, carts) => {
     const queryRunner = dataSource.createQueryRunner()
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
     
     try {
-        
-        if (await cartDao.checkCartById(userId, cartId) === '0') {
-            const error = new Error('INVALID_REQUEST');
+        let cartId = carts.map(el => el.cartId);
+        let itemId = carts.map(el => el.itemId);
+        let quantity = carts.map(el => el.quantity);
+
+        const check = await cartDao.checkCartById(userId, cartId)
+
+        if (check === '0') {
+            const error = new Error('INVALID_CARTS')
             error.statusCode = 404;
             throw error;
         }
-                
-        await orderDao.addOrderList(userId, itemId, quantity)
-        await cartDao.deleteCart(userId, cartId)
+
         
-        for (let i in itemId) {
-            await orderDao.updateItemAmount(itemId[i], quantity[i])
+
+        for (let i in carts) {
+            
         }
 
         await queryRunner.commitTransaction();
@@ -41,6 +45,6 @@ const getOrder = async (userId) => {
 }
 
 module.exports = {
-    pullOrder,
+    addOrder ,
     getOrder
 }

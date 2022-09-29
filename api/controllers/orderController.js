@@ -1,33 +1,23 @@
 const { asyncWrap } = require('../utils/error');
 const { orderService } = require('../services');
 
-const pullOrder = asyncWrap(async (req, res) => {
+const addOrder = asyncWrap(async (req, res) => {
     const userId = req.user.id;
-    const { cartId, itemId, quantity } = req.body;
-    console.log(cartId)
-    console.log(itemId)
-    console.log(quantity)
-    
-    if ( !userId || !cartId || !quantity ) {
-        const error = new Error('KEY_ERROR');
+    const items = req.body;
+
+    if (!items) {
+        const error = new Error('KEY_ERROR');   
         error.statusCode = 400;
         throw error;
     }
 
-    await orderService.pullOrder(userId, cartId, itemId, quantity);
+    await orderService.addOrder(userId, items);
 
     res.status(200).json({ message:'Your order has been received' })
 })
 
 const getOrder = asyncWrap(async (req, res) => {
     const userId = req.user.id;
-    console.log(userId)
-
-    if (!userId) {
-        const error = new Error('KEY_ERROR');
-        error.statusCode = 400;
-        throw error;
-    }
 
     const getOrder = await orderService.getOrder(userId)
 
@@ -35,6 +25,6 @@ const getOrder = asyncWrap(async (req, res) => {
 })
 
 module.exports = {
-    pullOrder,
+    addOrder,
     getOrder
 }
