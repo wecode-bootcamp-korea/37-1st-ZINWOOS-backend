@@ -1,7 +1,6 @@
 {
   "name": "first-project",
   "version": "1.0.0",
-  "description": "",
   "main": "app.js",
   "scripts": {
     "start": "nodemon app.js",
@@ -10,14 +9,23 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wecode-bootcamp-korea/37-1st-ZINWOOS-backend.git"
+  },
+  "bugs": {
+    "url": "https://github.com/wecode-bootcamp-korea/37-1st-ZINWOOS-backend/issues"
+  },
+  "homepage": "https://github.com/wecode-bootcamp-korea/37-1st-ZINWOOS-backend#readme",
+  "description": "",
   "dependencies": {
     "2": "^3.0.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.2",
     "express": "^4.18.1",
+    "httpie": "^1.1.2",
     "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.18.1",
     "mysql2": "^2.3.3",
     "typeorm": "^0.3.10"
   },

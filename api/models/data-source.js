@@ -12,9 +12,12 @@ const dataSource = new DataSource({
 dataSource.initialize()
     .then(() => {
         console.log(`DataSource has been initialized!`)
+
     })
     .catch((error) => {
         console.error("Error during Data Source initialization", error);
     });
 
-module.exports = dataSource;
+module.exports = {
+    dataSource
+}

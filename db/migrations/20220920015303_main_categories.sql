@@ -2,6 +2,7 @@
 CREATE TABLE main_categories(
     id INT NOT NULL AUTO_INCREMENT,
     name VARCHAR(50) NOT NULL UNIQUE,
+    description VARCHAR(1000) NULL,
     PRIMARY KEY (id)
 );
 

@@ -21,7 +21,8 @@ const loginRequired = asyncWrap(async (req, res, next) => {
         throw error;
     }
     
-    req.user = user.id
+    req.user = user;
+    
     next();
 })
 

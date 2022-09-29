@@ -17,7 +17,13 @@ const getNewList = async () => {
     return data;
 }
 
+const getItemById = async (itemId) => {
+    const item = await itemDao.readItem(itemId);
+    return item;
+}
+
 module.exports = {
+    getItemById,
     getNewList,
     getSubList,
     getMainList,
