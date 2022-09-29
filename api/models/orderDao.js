@@ -21,7 +21,7 @@ const addOrderList = async (userId, tmp, cartId, itemId, quantity) => {
         for (let i in itemId) {
             await queryRunner.query(
                 `UPDATE items
-                SET max_amount = max_amount - ?
+                SET stock = stock - ?
                 WHERE id = ?
                 `, [quantity[i], itemId[i]]
             )
