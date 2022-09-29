@@ -23,10 +23,6 @@ const addOrder = async (userId, items) => {
 
         
 
-        for (let i in items) {
-            
-        }
-
         await queryRunner.commitTransaction();
     } catch (err) {
         await queryRunner.rollbackTransaction();
