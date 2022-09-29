@@ -1,10 +1,12 @@
 const express  = require('express');
 const { itemController } = require('../controllers');
-const itemRouter = express.Router();
+const router = express.Router();
 
-itemRouter.get('/main', itemController.getMainList);
-itemRouter.get('/sub', itemController.getSubList);
-itemRouter.get('/new', itemController.getNewList);
-itemRouter.get('/all', itemController.getAll);
+router.get('/main', itemController.getMainList);
+router.get('/sub', itemController.getSubList);
+router.get('/new', itemController.getNewList);
+router.get('/all', itemController.getAll);
 
-module.exports = itemRouter;
+router.get('/:itemId', itemController.getItemById);
+
+module.exports = router;

@@ -1,11 +1,11 @@
 -- migrate:up
-CREATE TABLE carts(
+CREATE TABLE orders(
     id INT NOT NULL AUTO_INCREMENT,
     user_id INT NOT NULL,
     item_id INT NOT NULL,
-    option_id INT NULL,
-    quantity INT NOT NULL,
-    checkbox BOOLEAN NOT NULL DEFAULT 1,
+    item_price DECIMAL(8,1) NOT NULL,
+    count INT NOT NULL,
+    option_id INT NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
@@ -15,4 +15,4 @@ CREATE TABLE carts(
 );
 
 -- migrate:down
-DROP TABLE carts;
+DROP TABLE orders;
