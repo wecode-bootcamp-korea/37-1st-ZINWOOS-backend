@@ -45,7 +45,6 @@ const minusQuantity = async (cartId) => {
     }
 
     return await cartDao.minusQuantity(cartId)
-}
 
 const deleteCart = async (userId, cartId) => {
 
