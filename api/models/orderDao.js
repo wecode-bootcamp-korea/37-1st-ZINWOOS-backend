@@ -38,12 +38,16 @@ const getOrderList = async (userId) => {
     return result;
 }
 
-const updateItemAmount = async (itemId, quantity) => {
+const updateItemAmount = async (cartId, itemId, quantity) => {
     const result = await dataSource.query(
         `UPDATE items
-        SET max_amount = max_amount - ?
+        SET max_amount = max_amount - (
+            SELECT quantity
+            FROM carts
+            WHERE id IN (?)
+        )
         WHERE id = ?
-        `, [quantity, itemId]
+        `, [quantity, cartId, itemId]
     )
     return result;
 }
