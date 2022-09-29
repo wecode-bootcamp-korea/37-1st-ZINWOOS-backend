@@ -1,20 +1,48 @@
 const { dataSource } = require('./data-source');
 
-const addOrderList = async (userId, items) => {
+const addOrderList = async (userId, tmp, cartId, itemId, quantity) => {
 
-    let tmp = "";
-    items.map(el => tmp += `(${userId}, ${el.itemId}, ${el.quantity}),`)
-    tmp = tmp.slice(0,-1);
+    const queryRunner = dataSource.createQueryRunner()
 
-    const result = await dataSource.query(
-        `INSERT INTO orders(
-            user_id,
-            item_id,
-            quantity
-        ) VALUES ${tmp}
-        `
-    )
-    return result;
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    
+    try {
+
+        await queryRunner.query(
+            `INSERT INTO orders(
+                user_id,
+                item_id,
+                quantity
+            ) VALUES ${tmp}
+            `
+        )
+    
+        for (let i in itemId) {
+            await queryRunner.query(
+                `UPDATE items
+                SET max_amount = max_amount - ?
+                WHERE id = ?
+                `, [quantity[i], itemId[i]]
+            )
+        }
+
+        await queryRunner.query(
+            `DELETE FROM carts
+            WHERE user_id = ?
+            AND id IN (?)
+            `, [userId, cartId]
+        )
+
+        await queryRunner.commitTransaction();
+    } catch (err) {
+        await queryRunner.rollbackTransaction();
+        const error = new Error(`ROLLBACK : ${err.message}`);
+        error.statusCode = 400;
+        throw error;
+    } finally {
+        await queryRunner.release();
+    }
 }
 
 const getOrderList = async (userId) => {
@@ -38,27 +66,7 @@ const getOrderList = async (userId) => {
     return result;
 }
 
-const updateItemAmount = async (itemId, quantity) => {
-    
-    try {
-        for (let i in itemId) {
-            const result = await dataSource.query(
-                `UPDATE items
-                SET max_amount = max_amount - ?
-                WHERE id = ?
-                `, [quantity[i], itemId[i]]
-            )
-        }
-        return result;
-    } catch(err) {
-        const error = new Error(err.message);
-        error.statusCode = 400;
-        throw error;
-    }
-}
-
 module.exports = {
     addOrderList,
-    getOrderList,
-    updateItemAmount
+    getOrderList
 }

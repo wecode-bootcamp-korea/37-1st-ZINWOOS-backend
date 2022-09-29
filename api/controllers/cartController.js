@@ -44,6 +44,7 @@ const getCart = asyncWrap(async(req, res) => {
 })
 
 const plusQuantity = asyncWrap(async (req, res) => {
+    const userId = req.user.id;
     const { cartId } = req.body;
 
     if (!cartId) {
@@ -52,12 +53,13 @@ const plusQuantity = asyncWrap(async (req, res) => {
         throw error;
     }
 
-    await cartService.plusQuantity(cartId);
+    await cartService.plusQuantity(userId, cartId);
 
     res.status(204).send()
 })
 
 const minusQuantity = asyncWrap(async (req, res) => {
+    const userId = req.user.id;
     const { cartId } = req.body;
 
     if (!cartId) {
@@ -66,7 +68,9 @@ const minusQuantity = asyncWrap(async (req, res) => {
         throw error;
     }
 
-    await cartService.minusQuantity(cartId)
+    await cartService.minusQuantity(userId, cartId)
+
+    res.status(204).send()
 })
 
 const deleteCart = asyncWrap(async (req, res) => {

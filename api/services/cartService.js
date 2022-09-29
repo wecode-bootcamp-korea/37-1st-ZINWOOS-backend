@@ -23,8 +23,8 @@ const getCart = async ( userId, limit, offset ) => {
     return await cartDao.getAllCart(userId, limit, offset);
 }
 
-const plusQuantity = async (cartId) => {
-    const match = await cartDao.checkCartById(cartId);
+const plusQuantity = async (userId, cartId) => {
+    const match = await cartDao.checkCartById(userId, cartId);
 
     if (match === '0') {
         const error = new Error('INVALID_ITEM');
@@ -35,8 +35,8 @@ const plusQuantity = async (cartId) => {
     return await cartDao.plusQuantity(cartId)
 }
 
-const minusQuantity = async (cartId) => {
-    const match = await cartDao.checkCartById(cartId);
+const minusQuantity = async (userId, cartId) => {
+    const match = await cartDao.checkCartById(userId, cartId);
 
     if (match === '0') {
         const error = new Error('INVALID_ITEM');

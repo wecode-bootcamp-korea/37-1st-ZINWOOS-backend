@@ -3,14 +3,14 @@ const { orderService } = require('../services');
 
 const addOrder = asyncWrap(async (req, res) => {
     const userId = req.user.id;
-    const items = req.body;
+    const { items } = req.body;
 
     if (!items) {
         const error = new Error('KEY_ERROR');   
         error.statusCode = 400;
         throw error;
     }
-
+    
     await orderService.addOrder(userId, items);
 
     res.status(200).json({ message:'Your order has been received' })

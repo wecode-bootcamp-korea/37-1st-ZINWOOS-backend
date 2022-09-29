@@ -89,7 +89,7 @@ const updateCart = async (userId, itemId, optionId, quantity) => {
 }
 
 const plusQuantity = async (cartId) => {
-    const result = await dataSource.quary(
+    const result = await dataSource.query(
         `UPDATE carts
         SET quantity = quantity + 1
         WHERE id = ?
@@ -100,12 +100,14 @@ const plusQuantity = async (cartId) => {
 }
 
 const minusQuantity = async (cartId) => {
-    const result = await dataSource.quary(
-        `UPDATE carts;
+    const result = await dataSource.query(
+        `UPDATE carts
         SET quantity = quantity - 1
         WHERE id = ?
         `, [cartId]
     )
+
+    return result;
 }
 
 const deleteCart= async (userId, cartId) => {
