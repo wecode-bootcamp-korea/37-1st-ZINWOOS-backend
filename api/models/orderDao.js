@@ -39,13 +39,22 @@ const getOrderList = async (userId) => {
 }
 
 const updateItemAmount = async (itemId, quantity) => {
-    const result = await dataSource.query(
-        `UPDATE items
-        SET max_amount = max_amount - ?
-        WHERE id = ?
-        `, [quantity, itemId]
-    )
-    return result;
+    
+    try {
+        for (let i in itemId) {
+            const result = await dataSource.query(
+                `UPDATE items
+                SET max_amount = max_amount - ?
+                WHERE id = ?
+                `, [quantity[i], itemId[i]]
+            )
+        }
+        return result;
+    } catch(err) {
+        const error = new Error(err.message);
+        error.statusCode = 400;
+        throw error;
+    }
 }
 
 module.exports = {
