@@ -1,4 +1,4 @@
-const dataSource = require('./data-source');
+const { dataSource } = require('./data-source');
 
 const addOrderList = async (userId, items) => {
 
@@ -38,16 +38,12 @@ const getOrderList = async (userId) => {
     return result;
 }
 
-const updateItemAmount = async (cartId, itemId, quantity) => {
+const updateItemAmount = async (itemId, quantity) => {
     const result = await dataSource.query(
         `UPDATE items
-        SET max_amount = max_amount - (
-            SELECT quantity
-            FROM carts
-            WHERE id IN (?)
-        )
+        SET max_amount = max_amount - ?
         WHERE id = ?
-        `, [quantity, cartId, itemId]
+        `, [quantity, itemId]
     )
     return result;
 }

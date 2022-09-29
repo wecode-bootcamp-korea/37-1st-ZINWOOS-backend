@@ -28,6 +28,18 @@ const readItem = async (itemId) => {
   return itemInfo;
 }
 
+const checkItemAmount = async (itemId) => {
+  const [result] = await dataSource.query(
+    `SELECT max_amount
+    FROM items
+    WHERE id = ?
+    `, [itemId]
+  )
+
+  return result.max_amount;
+}
+
 module.exports = {
-  readItem
+  readItem,
+  checkItemAmount
 }

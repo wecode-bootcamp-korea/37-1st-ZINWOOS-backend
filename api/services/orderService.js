@@ -1,6 +1,7 @@
-const { cartDao } = require('../models')
+const { cartDao } = require('../models');
+const { itemDao } = require('../models');
 const { orderDao } = require('../models');
-const dataSource = require('../models/data-source');
+const { dataSource } = require('../models/data-source');
 
 const addOrder = async (userId, items) => {
     const queryRunner = dataSource.createQueryRunner()
@@ -20,15 +21,26 @@ const addOrder = async (userId, items) => {
             error.statusCode = 404;
             throw error;
         }
-
         
+        await cartDao.deleteCart(userId, cartId);
+
+        for (let i in items) {
+            const check = await itemDao.checkItemAmount(itemId[i])
+
+            if (check < quantity[i]) {
+                const error = new Error('INVALID_QUANTITY');
+                error.statusCode = 400;
+                throw error;
+            }
+
+            await orderDao.updateItemAmount(itemId[i], quantity[i]);
+        }
+
+        await orderDao.addOrderList(userId, items);
 
         await queryRunner.commitTransaction();
     } catch (err) {
         await queryRunner.rollbackTransaction();
-        const error = new Error(`ROLLBACK : ${err.message}`);
-        error.statusCode = err.statusCod;
-        throw error;
     } finally {
         await queryRunner.release();
     }
@@ -41,6 +53,6 @@ const getOrder = async (userId) => {
 }
 
 module.exports = {
-    addOrder ,
+    addOrder,
     getOrder
 }

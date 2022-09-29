@@ -1,4 +1,4 @@
-const dataSource = require('./data-source')
+const { dataSource } = require('./data-source')
 
 const createCartList = async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
@@ -17,7 +17,7 @@ const createCartList = async (userId, itemId, quantity, optionId) => {
 const getAllCart= async (userId, limit, offset) => {
     const result = await dataSource.query(
         `SELECT
-            c.id,
+            c.id as cartId,
             i.id as itemId,
             i.name,
             i.price,

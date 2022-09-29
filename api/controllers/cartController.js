@@ -38,7 +38,7 @@ const getCart = asyncWrap(async(req, res) => {
         throw error;
     }
 
-    const cartList = await cartService.getCartList(+userId, +limit, +offset);
+    const cartList = await cartService.getCart(+userId, +limit, +offset);
 
     res.status(200).json({ cartList });
 })
