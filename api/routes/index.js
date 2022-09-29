@@ -8,9 +8,8 @@ const likeRouter = require('./likeRouter')
 
 const router = express.Router();
 
-
 router.use('/users', userRouter);
-router.use('/posts', itemRouter);
+router.use('/items', itemRouter);
 router.use('/carts', cartRouter);
 router.use('/orders', orderRouter);
 router.use('/likes', likeRouter);

@@ -8,6 +8,7 @@ CREATE TABLE items(
     detail_image VARCHAR(1000) NULL,
     sub_category_id INT NOT NULL,
     max_amount INT UNSIGNED NOT NULL,
+    stock INT UNSIGNED NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
