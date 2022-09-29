@@ -1,4 +1,4 @@
-const dataSource = require('./data-source');
+const {dataSource} = require('./data-source');
 
 const getAll = async ( sort, order, limit, offset) => {
     const result = await dataSource.query(`
@@ -72,6 +72,8 @@ const getMainList = async ( main_category_id, sort, order, limit, offset) => {
             ON sub_categories.main_category_id = main_categories.id
         LEFT JOIN likes
             ON items.id = likes.item_id
+        INNER JOIN main_categories
+            ON sub_categories.main_category_id = main_categories.id
         WHERE main_categories.id = ${main_category_id} 
         AND sub_categories.main_category_id = ${main_category_id}
         ORDER BY ${sort} ${order} LIMIT ? OFFSET ?
@@ -98,6 +100,9 @@ const getSubList = async ( sub_category_id, sort, order, limit, offset) => {
     sub_categories.id as sub_cate_id,
     sub_categories.name as sub_cate_name,
     sub_categories.main_category_id,
+    main_categories.id as main_cate_id,
+    main_categories.name as main_cate_name,
+    main_categories.description as main_description,
     likes.item_id as likes
     FROM items
         LEFT JOIN tags_items
@@ -108,6 +113,8 @@ const getSubList = async ( sub_category_id, sort, order, limit, offset) => {
             ON items.sub_category_id = sub_categories.id
         LEFT JOIN likes
             ON items.id = likes.item_id
+        INNER JOIN main_categories
+            ON sub_categories.main_category_id = main_categories.id
         WHERE items.sub_category_id = ?
         ORDER BY ${sort} ${order} LIMIT ? OFFSET ?
 `, [ sub_category_id, limit, offset]
@@ -157,7 +164,6 @@ const readItem = async (itemId) => {
             WHERE items.id = ${itemId};
     `
 )
-
     return itemInfo;
 }
 
