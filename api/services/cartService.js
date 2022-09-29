@@ -19,8 +19,32 @@ const addCart = async(userId, itemId, quantity, optionId) => {
     return await cartDao.createCartList(userId, itemId, quantity, optionId);
 }
 
-const getCartList = async ( userId, limit, offset ) => {
-    return await cartDao.getAllCartList(userId, limit, offset);
+const getCart = async ( userId, limit, offset ) => {
+    return await cartDao.getAllCart(userId, limit, offset);
+}
+
+const plusQuantity = async (userId, cartId) => {
+    const match = await cartDao.checkCartById(userId, cartId);
+
+    if (match === '0') {
+        const error = new Error('INVALID_ITEM');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return await cartDao.plusQuantity(cartId)
+}
+
+const minusQuantity = async (userId, cartId) => {
+    const match = await cartDao.checkCartById(userId, cartId);
+
+    if (match === '0') {
+        const error = new Error('INVALID_ITEM');
+        error.statusCode = 404;
+        throw error;
+    }
+
+    return await cartDao.minusQuantity(cartId)
 }
 
 const deleteCart = async (userId, cartId) => {
@@ -39,6 +63,8 @@ const deleteCart = async (userId, cartId) => {
 
 module.exports = {
     addCart,
-    getCartList,
-    deleteCart,
+    getCart,
+    plusQuantity,
+    minusQuantity,
+    deleteCart
 }

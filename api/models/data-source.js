@@ -19,5 +19,5 @@ dataSource.initialize()
     });
 
 module.exports = {
-  dataSource
+    dataSource
 }
