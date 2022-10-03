@@ -5,6 +5,7 @@ const addOrder = asyncWrap(async (req, res) => {
     const userId = req.user.id;
     const { items } = req.body;
 
+    console.log(items)
     if (!items) {
         const error = new Error('KEY_ERROR');   
         error.statusCode = 400;
