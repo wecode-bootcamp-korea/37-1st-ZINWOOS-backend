@@ -23,12 +23,13 @@
 <h2>팀원별 역할(Backend)</h2>
   김성식
   <ul>
-    <li></li>
+    <li>Bcrypt 암호화와 JsonWebToken 인증을 적용한 회원가입, 로그인 기능 API 구현</li>
+    <li>장바구니 CRUD 기능 API 구현</li>
+    <li>트랜잭션을 적용한 상품 주문하기 기능 API 구현</li>
   </ul>
   정인호
-  <li>상품별로 필터, 페이지네이션을 적용하여 리스트 불러오는 api구현, 그에 따른 query문 작성/li>
   <ul>
-    <li></li>
+    <li>상품별로 필터, 페이지네이션을 적용하여 리스트 불러오는 api구현, 그에 따른 query문 작성</li>
   </ul>
   최진우
   <ul>
