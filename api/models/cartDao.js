@@ -1,4 +1,4 @@
-const dataSource = require('./data-source')
+const { dataSource } = require('./data-source')
 
 const createCartList = async (userId, itemId, quantity, optionId) => {
     const result = await dataSource.query(
@@ -14,10 +14,10 @@ const createCartList = async (userId, itemId, quantity, optionId) => {
     return result;
 }
 
-const getAllCartList = async (userId, limit, offset) => {
+const getAllCart= async (userId, limit, offset) => {
     const result = await dataSource.query(
         `SELECT
-            c.id,
+            c.id as cartId,
             i.id as itemId,
             i.name,
             i.price,
@@ -69,7 +69,7 @@ const checkCartById = async (userId, cartId) => {
     return result.a;
 }
 
-const updateCart = async (userId, itemId, quantity, optionId) => {
+const updateCart = async (userId, itemId, optionId, quantity) => {
     const result = await dataSource.query(
         `UPDATE carts
         SET quantity = carts.quantity + ?
@@ -83,6 +83,28 @@ const updateCart = async (userId, itemId, quantity, optionId) => {
             )
         )
         `, [quantity, userId, itemId, optionId]
+    )
+
+    return result;
+}
+
+const plusQuantity = async (cartId) => {
+    const result = await dataSource.query(
+        `UPDATE carts
+        SET quantity = quantity + 1
+        WHERE id = ?
+        `, [cartId]
+    )
+
+    return result;
+}
+
+const minusQuantity = async (cartId) => {
+    const result = await dataSource.query(
+        `UPDATE carts
+        SET quantity = quantity - 1
+        WHERE id = ?
+        `, [cartId]
     )
 
     return result;
@@ -104,9 +126,11 @@ const deleteCart= async (userId, cartId) => {
 
 module.exports = {
     createCartList,
-    getAllCartList,
+    getAllCart,
     checkCart,
     checkCartById,
     updateCart,
+    plusQuantity,
+    minusQuantity,
     deleteCart
 }
