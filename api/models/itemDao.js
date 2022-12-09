@@ -152,8 +152,8 @@ const readItem = async (itemId) => {
         items.detail,
         items.detail_image,
         items.max_amount,
-        options.name as option_name,
-        options.price as option_price,
+        ANY_VALUE(options.name) as option_name,
+        ANY_VALUE(options.price) as option_price,
         JSON_ARRAYAGG(item_images.image_URL) as image_url
             FROM items
             JOIN sub_categories ON items.sub_category_id = sub_categories.id
